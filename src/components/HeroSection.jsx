@@ -7,13 +7,13 @@ export const HeroSection = () => (
         className="bg-gray-900 col-span-1 md:col-span-2 min-h-[400px] relative overflow-hidden shadow-2xl p-0 border-none"
         hoverEffect={false}
     >
-        {/* CSS FIX: 'object-bottom' forces the image to align to the bottom edge */}
-        {/* This ensures the Car and Charger are always visible, cropping the sky instead */}
+        {/* CSS FIX: Custom object-position to frame both car (bottom) and solar panels (top) */}
         <img
             src="/hero-gen-v2.png"
             onError={(e) => e.target.src = 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2600&auto=format&fit=crop'}
             alt="Domoteknik System"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: 'center 75%' }}
         />
 
         {/* Gradient for text readability */}
@@ -35,7 +35,7 @@ export const HeroSection = () => (
                 Integramos Solar, Aerotermia y Vehículo Eléctrico bajo un mismo cerebro.
             </p>
 
-            <button className="w-fit bg-[#84cc16] text-[#0b1d16] px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(132,204,22,0.4)] hover:bg-[#65a30d] transition-all duration-300 flex items-center gap-2">
+            <button className="w-fit bg-white text-gray-900 px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(132,204,22,0.4)] hover:bg-[#84cc16] hover:text-gray-900 transition-all duration-300 flex items-center gap-2">
                 SOLICITA TU ESTUDIO
                 <ChevronRight className="w-5 h-5" />
             </button>

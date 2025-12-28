@@ -8,7 +8,7 @@ export const Header = () => {
     return (
         <>
             {/* HEADER FIJO CON FONDO SIEMPRE VISIBLE (NO TRANSPARENTE) */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-[#f4f4f0]/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm py-4 transition-all">
+            <header className="fixed top-0 left-0 right-0 z-50 bg-[#f4f4f0]/95 backdrop-blur-md py-4 transition-all w-full">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
 
                     {/* LOGOTIPO */}

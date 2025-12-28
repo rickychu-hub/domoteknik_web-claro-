@@ -34,7 +34,7 @@ export const HomePage = () => {
             className="max-w-7xl mx-auto relative z-10 px-4 md:px-6"
         >
             {/* SECTION 1: HERO GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-[minmax(180px,auto)] mb-20">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-[minmax(180px,auto)] mb-10">
                 <HeroSection />
                 <LoxoneCore />
                 <ServiceCard icon={Sun} title="Solar Integrada" subtitle="Paneles Full-Black invisibles. Estética sin compromisos." path="/solar" />

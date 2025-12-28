@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-    Sun, Battery, Wind, Zap, BrainCircuit, CheckCircle2, ArrowRight, Home, Leaf, Trees
+    Sun, Battery, Wind, CarFront, BrainCircuit, CheckCircle2, ArrowRight, Home, Leaf, Trees, ChevronLeft
 } from 'lucide-react';
 
 const EcosystemWizard = () => {
     const [step, setStep] = useState(1);
     const [selectedModules, setSelectedModules] = useState(['solar']);
-    const [propertyType, setPropertyType] = useState('house');
+    const [propertyType, setPropertyType] = useState('casa');
     const [monthlyBill, setMonthlyBill] = useState(150);
 
     // --- CONFIGURACIÓN DE DATOS ---
@@ -14,7 +14,7 @@ const EcosystemWizard = () => {
         { id: 'solar', label: 'Solar', icon: Sun, color: 'text-amber-400', border: 'border-amber-400', desc: 'Pack Paneles AIKO N-Type (4kWp)' },
         { id: 'battery', label: 'Batería', icon: Battery, color: 'text-emerald-400', border: 'border-emerald-400', desc: 'Huawei LUNA2000 10kWh' },
         { id: 'aerotermia', label: 'Aerotermia', icon: Wind, color: 'text-sky-400', border: 'border-sky-400', desc: 'Daikin Altherma 3 (R32)' },
-        { id: 'charger', label: 'Cargador', icon: Zap, color: 'text-purple-400', border: 'border-purple-400', desc: 'Wallbox Pulsar Plus 7.4kW' },
+        { id: 'charger', label: 'Cargador', icon: CarFront, color: 'text-purple-400', border: 'border-purple-400', desc: 'Wallbox Pulsar Plus 7.4kW' },
         { id: 'loxone', label: 'Loxone', icon: BrainCircuit, color: 'text-lime-400', border: 'border-lime-500', desc: 'Miniserver Gen2 (Gestión Total)' },
     ];
 
@@ -25,39 +25,51 @@ const EcosystemWizard = () => {
     };
 
     const calculateSavings = () => {
-        // Lógica simple de simulación
         let base = 0;
         if (selectedModules.includes('solar')) base += 900;
         if (selectedModules.includes('battery')) base += 500;
         if (selectedModules.includes('aerotermia')) base += 800;
         if (selectedModules.includes('charger')) base += 1200;
-        // Ajuste por gasto actual
         return Math.floor(base * (monthlyBill / 100));
     };
 
     const savings = calculateSavings();
 
     return (
-        <div className="w-full min-h-screen bg-slate-50 flex flex-col items-center py-12 px-4">
+        <div className="w-full min-h-screen bg-slate-50 flex flex-col items-center py-6 px-4">
 
-            {/* HEADER SIMPLE */}
-            <div className="max-w-4xl w-full flex justify-between items-center mb-8">
-                <div className="text-sm font-bold tracking-widest text-slate-400">CONFIGURADOR</div>
-                <div className="flex gap-2">
+            {/* HEADER GLOBAl: LAYOUT ACTUALIZADO */}
+            <div className="max-w-6xl w-full relative flex items-center justify-center mb-6">
+
+                {/* BOTÓN VOLVER (IZQUIERDA) */}
+                <button
+                    onClick={() => step === 1 ? window.location.href = '/' : setStep(step - 1)}
+                    className="absolute left-0 flex items-center gap-1 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                    <ChevronLeft size={20} /> Volver
+                </button>
+
+                {/* TÍTULO TEXTUAL EXACTO */}
+                <div className="text-sm font-bold tracking-widest text-slate-400 uppercase">
+                    DISEÑA TU ECOSISTEMA
+                </div>
+
+                {/* INDICADORES DE LOS PASOS (DERECHA) */}
+                <div className="absolute right-0 flex gap-2">
                     {[1, 2, 3].map(i => (
-                        <div key={i} className={`h-2 w-12 rounded-full transition-all ${i <= step ? 'bg-[#84cc16]' : 'bg-slate-200'}`} />
+                        <div key={i} className={`h-2 w-8 md:w-12 rounded-full transition-all ${i <= step ? 'bg-[#84cc16]' : 'bg-slate-200'}`} />
                     ))}
                 </div>
             </div>
 
-            {/* CONTENIDO PRINCIPAL */}
-            <div className="max-w-6xl w-full bg-white rounded-3xl shadow-xl overflow-hidden min-h-[600px] flex flex-col">
+            {/* CARD PRINCIPAL DE CONTENIDO */}
+            <div className="relative max-w-6xl w-full bg-white rounded-3xl shadow-xl overflow-hidden min-h-[600px] flex flex-col">
 
-                {/* PASO 1: SELECCIÓN */}
+                {/* PASO 1: SELECCIÓN DE MÓDULOS */}
                 {step === 1 && (
                     <div className="p-8 flex flex-col h-full animate-in fade-in slide-in-from-bottom-4 duration-500 relative overflow-hidden">
 
-                        {/* SVG BACKGROUND CONNECTION LAYER */}
+                        {/* FONDO SVG ANIMADO (ESTÉTICO) */}
                         <svg className="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-30">
                             <defs>
                                 <linearGradient id="lineSolar" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -76,9 +88,6 @@ const EcosystemWizard = () => {
                                     <stop offset="0%" stopColor="#84cc16" /><stop offset="100%" stopColor="#84cc16" stopOpacity="0" />
                                 </linearGradient>
                             </defs>
-
-                            {/* Lines aiming for center (50% 50%) from approximate grid positions */}
-                            {/* Desktop Layout Assumption: 5 cols. Mobile will look abstract/cool anyway. */}
                             <line x1="10%" y1="40%" x2="50%" y2="50%" stroke="url(#lineSolar)" strokeWidth="2" className="animate-pulse" />
                             <line x1="30%" y1="40%" x2="50%" y2="50%" stroke="url(#lineBat)" strokeWidth="2" className="animate-pulse delay-75" />
                             <line x1="50%" y1="35%" x2="50%" y2="50%" stroke="url(#lineAero)" strokeWidth="2" className="animate-pulse delay-150" />
@@ -97,7 +106,7 @@ const EcosystemWizard = () => {
                                             key={mod.id}
                                             onClick={() => toggleModule(mod.id)}
                                             className={`p-6 rounded-2xl border-2 flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:scale-105 relative bg-white
-                            ${selectedModules.includes(mod.id)
+                                            ${selectedModules.includes(mod.id)
                                                     ? 'border-[#84cc16] shadow-xl shadow-lime-100 ring-4 ring-lime-50'
                                                     : 'border-slate-100 hover:border-slate-200 text-slate-400 grayscale'
                                                 }`}
@@ -125,7 +134,7 @@ const EcosystemWizard = () => {
                     </div>
                 )}
 
-                {/* PASO 2: DATOS */}
+                {/* PASO 2: DATOS DE USUARIO */}
                 {step === 2 && (
                     <div className="p-12 flex flex-col items-center justify-center h-full animate-in fade-in slide-in-from-right-8 duration-500">
                         <h2 className="text-3xl font-bold text-[#0b1d16] mb-8">Tu Perfil Energético</h2>
@@ -169,74 +178,108 @@ const EcosystemWizard = () => {
                     </div>
                 )}
 
-                {/* PASO 3: RESULTADOS - SPLIT & BAR LAYOUT */}
+                {/* PASO 3: DIAGRAMA Y RESULTADOS (REFINADO VISUAL 2.0) */}
                 {step === 3 && (
                     <div className="flex flex-col h-full animate-in zoom-in duration-500 gap-4 p-6">
 
-                        {/* ZONA SUPERIOR: VISUALIZACIÓN Y CONFIGURACIÓN (GRID 50/50) */}
                         <div className="flex flex-col lg:flex-row gap-4 flex-1 min-h-0">
 
-                            {/* COLUMNA IZQUIERDA: TECH HUB COMPACTO */}
+                            {/* DIAGRAMA TECH HUB - OUTLINE & GRADIENTS */}
                             <div className="lg:w-1/2 bg-[#0b1d16] rounded-2xl relative overflow-hidden flex items-center justify-center p-6 shadow-2xl border border-slate-800">
-                                {/* Fondo y Decoración */}
+                                {/* Fondos */}
                                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#1a2e26] via-[#0b1d16] to-[#0b1d16] opacity-60"></div>
                                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
 
-                                {/* Hub Central Visual */}
                                 <div className="relative w-full max-w-[320px] aspect-square">
+                                    {/* SVG DE CONEXIONES CON GRADIENTES SUAVES Y PULSO */}
                                     <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
                                         <defs>
-                                            <linearGradient id="gradSolar" x1="50%" y1="10%" x2="50%" y2="50%" gradientUnits="userSpaceOnUse"><stop offset="0%" stopColor="#fbbf24" stopOpacity="1" /><stop offset="100%" stopColor="#84cc16" stopOpacity="0.2" /></linearGradient>
-                                            <linearGradient id="gradBat" x1="90%" y1="50%" x2="50%" y2="50%" gradientUnits="userSpaceOnUse"><stop offset="0%" stopColor="#34d399" stopOpacity="1" /><stop offset="100%" stopColor="#84cc16" stopOpacity="0.2" /></linearGradient>
-                                            <linearGradient id="gradAero" x1="50%" y1="90%" x2="50%" y2="50%" gradientUnits="userSpaceOnUse"><stop offset="0%" stopColor="#38bdf8" stopOpacity="1" /><stop offset="100%" stopColor="#84cc16" stopOpacity="0.2" /></linearGradient>
-                                            <linearGradient id="gradCharge" x1="10%" y1="50%" x2="50%" y2="50%" gradientUnits="userSpaceOnUse"><stop offset="0%" stopColor="#c084fc" stopOpacity="1" /><stop offset="100%" stopColor="#84cc16" stopOpacity="0.2" /></linearGradient>
-                                            <style>
-                                                {`
-                                                    @keyframes flow-energy {
-                                                        to { stroke-dashoffset: 0; }
-                                                    }
-                                                    .energy-line {
-                                                        stroke-dasharray: 20;
-                                                        stroke-dashoffset: 100;
-                                                        animation: flow-energy 1.5s linear infinite;
-                                                        stroke-linecap: round;
-                                                    }
-                                                `}
-                                            </style>
+                                            {/* GRADIENTES DE LÍNEA: Color solido a Transparente (hacia el centro) */}
+                                            {/* Solar: Top to Center */}
+                                            <linearGradient id="gradSolar" x1="50%" y1="0%" x2="50%" y2="100%" gradientUnits="userSpaceOnUse"><stop offset="0%" stopColor="#fbbf24" stopOpacity="1" /><stop offset="100%" stopColor="#fbbf24" stopOpacity="0" /></linearGradient>
+                                            {/* Batería: Right to Center */}
+                                            <linearGradient id="gradBat" x1="100%" y1="50%" x2="0%" y2="50%" gradientUnits="userSpaceOnUse"><stop offset="0%" stopColor="#34d399" stopOpacity="1" /><stop offset="100%" stopColor="#34d399" stopOpacity="0" /></linearGradient>
+                                            {/* Aerotermia: Bottom to Center */}
+                                            <linearGradient id="gradAero" x1="50%" y1="100%" x2="50%" y2="0%" gradientUnits="userSpaceOnUse"><stop offset="0%" stopColor="#38bdf8" stopOpacity="1" /><stop offset="100%" stopColor="#38bdf8" stopOpacity="0" /></linearGradient>
+                                            {/* Cargador: Left to Center */}
+                                            <linearGradient id="gradCharge" x1="0%" y1="50%" x2="100%" y2="50%" gradientUnits="userSpaceOnUse"><stop offset="0%" stopColor="#c084fc" stopOpacity="1" /><stop offset="100%" stopColor="#c084fc" stopOpacity="0" /></linearGradient>
                                         </defs>
-                                        {/* Líneas de Energía Sólidas con Animación de Flujo */}
-                                        {selectedModules.includes('solar') && <line x1="50%" y1="15%" x2="50%" y2="50%" stroke="url(#gradSolar)" strokeWidth="4" className="energy-line" />}
-                                        {selectedModules.includes('battery') && <line x1="85%" y1="50%" x2="50%" y2="50%" stroke="url(#gradBat)" strokeWidth="4" className="energy-line" style={{ animationDelay: '0.2s' }} />}
-                                        {selectedModules.includes('aerotermia') && <line x1="50%" y1="85%" x2="50%" y2="50%" stroke="url(#gradAero)" strokeWidth="4" className="energy-line" style={{ animationDelay: '0.4s' }} />}
-                                        {selectedModules.includes('charger') && <line x1="15%" y1="50%" x2="50%" y2="50%" stroke="url(#gradCharge)" strokeWidth="4" className="energy-line" style={{ animationDelay: '0.6s' }} />}
+
+                                        {/* SOLAR: Top Center -> Center Top */}
+                                        {selectedModules.includes('solar') &&
+                                            <line x1="50%" y1="20%" x2="50%" y2="35%" stroke="url(#gradSolar)" strokeWidth="2" className="animate-pulse" />
+                                        }
+
+                                        {/* BATERIA: Right Center -> Center Right */}
+                                        {selectedModules.includes('battery') &&
+                                            <line x1="80%" y1="50%" x2="65%" y2="50%" stroke="url(#gradBat)" strokeWidth="2" className="animate-pulse" />
+                                        }
+
+                                        {/* AEROTERMIA: Bottom Center -> Center Bottom */}
+                                        {selectedModules.includes('aerotermia') &&
+                                            <line x1="50%" y1="80%" x2="50%" y2="65%" stroke="url(#gradAero)" strokeWidth="2" className="animate-pulse" />
+                                        }
+
+                                        {/* CARGADOR: Left Center -> Center Left (OFFSET 22%) */}
+                                        {selectedModules.includes('charger') &&
+                                            <line x1="22%" y1="50%" x2="35%" y2="50%" stroke="url(#gradCharge)" strokeWidth="2" className="animate-pulse" />
+                                        }
                                     </svg>
 
-                                    {/* CORE (CONDICIONAL: HOGAR vs CEREBRO) */}
+                                    {/* NODO CENTRAL - ESTILO OUTLINE ELEGANTE (SIN RELLENO RADIACTIVO) */}
                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                                        <div className={`w-24 h-24 rounded-full border-2 ${selectedModules.includes('loxone') ? 'border-[#84cc16] bg-[#0b1d16] shadow-[0_0_40px_rgba(132,204,22,0.5)]' : 'border-slate-600 bg-[#0b1d16] shadow-none'} flex flex-col items-center justify-center transition-all duration-500`}>
+                                        <div className={`w-24 h-24 rounded-full border-2 border-[#84cc16] bg-[#0b1d16] shadow-[0_0_20px_rgba(132,204,22,0.4)] flex flex-col items-center justify-center transition-all duration-500`}>
                                             {selectedModules.includes('loxone') ? (
                                                 <>
-                                                    <BrainCircuit className="w-8 h-8 text-[#84cc16] animate-pulse" />
-                                                    <span className="text-[9px] font-bold text-[#84cc16] mt-1">LOXONE</span>
+                                                    <BrainCircuit className="w-10 h-10 text-[#84cc16] animate-pulse" />
+                                                    <span className="text-[10px] font-black text-[#84cc16] mt-1 tracking-widest drop-shadow-md">LOXONE</span>
                                                 </>
                                             ) : (
                                                 <>
-                                                    <Home className="w-8 h-8 text-slate-400" />
-                                                    <span className="text-[9px] font-bold text-slate-400 mt-1">HOGAR</span>
+                                                    <Home className="w-10 h-10 text-[#84cc16]" />
+                                                    <span className="text-[10px] font-black text-[#84cc16] mt-1 tracking-widest drop-shadow-md">HOGAR</span>
                                                 </>
                                             )}
                                         </div>
                                     </div>
 
-                                    {/* SATÉLITES */}
-                                    {selectedModules.includes('solar') && <div className="absolute top-[2%] left-1/2 -translate-x-1/2 z-20"><div className="p-3 rounded-xl bg-black/50 border border-amber-400/50 shadow-[0_0_15px_rgba(251,191,36,0.2)]"><Sun className="w-6 h-6 text-amber-400" /></div></div>}
-                                    {selectedModules.includes('battery') && <div className="absolute top-1/2 right-[2%] -translate-y-1/2 z-20"><div className="p-3 rounded-xl bg-black/50 border border-emerald-400/50 shadow-[0_0_15px_rgba(52,211,153,0.2)]"><Battery className="w-6 h-6 text-emerald-400" /></div></div>}
-                                    {selectedModules.includes('aerotermia') && <div className="absolute bottom-[2%] left-1/2 -translate-x-1/2 z-20"><div className="p-3 rounded-xl bg-black/50 border border-sky-400/50 shadow-[0_0_15px_rgba(56,189,248,0.2)]"><Wind className="w-6 h-6 text-sky-400" /></div></div>}
-                                    {selectedModules.includes('charger') && <div className="absolute top-1/2 left-[2%] -translate-y-1/2 z-20"><div className="p-3 rounded-xl bg-black/50 border border-purple-400/50 shadow-[0_0_15px_rgba(192,132,252,0.2)]"><Zap className="w-6 h-6 text-purple-400" /></div></div>}
+                                    {/* SATÉLITES CON ETIQUETAS VISIBLES */}
+                                    {selectedModules.includes('solar') && (
+                                        <div className="absolute top-[2%] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1">
+                                            <div className="p-3 rounded-xl bg-black/50 border border-amber-400/50 shadow-[0_0_15px_rgba(251,191,36,0.2)]">
+                                                <Sun className="w-6 h-6 text-amber-400" />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider bg-black/60 px-2 py-0.5 rounded-full backdrop-blur-sm shadow-sm border border-white/5">Solar</span>
+                                        </div>
+                                    )}
+                                    {selectedModules.includes('battery') && (
+                                        <div className="absolute top-1/2 right-[2%] -translate-y-1/2 z-20 flex flex-col items-center gap-1">
+                                            <div className="p-3 rounded-xl bg-black/50 border border-emerald-400/50 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+                                                <Battery className="w-6 h-6 text-emerald-400" />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider bg-black/60 px-2 py-0.5 rounded-full backdrop-blur-sm shadow-sm border border-white/5">Batería</span>
+                                        </div>
+                                    )}
+                                    {selectedModules.includes('aerotermia') && (
+                                        <div className="absolute bottom-[2%] left-1/2 -translate-x-1/2 z-20 flex flex-col-reverse items-center gap-1">
+                                            <div className="p-3 rounded-xl bg-black/50 border border-sky-400/50 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+                                                <Wind className="w-6 h-6 text-sky-400" />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider bg-black/60 px-2 py-0.5 rounded-full backdrop-blur-sm shadow-sm border border-white/5">Aerotermia</span>
+                                        </div>
+                                    )}
+                                    {selectedModules.includes('charger') && (
+                                        <div className="absolute top-1/2 left-[2%] -translate-y-1/2 z-20 flex flex-col items-center gap-1">
+                                            <div className="p-3 rounded-xl bg-black/50 border border-purple-400/50 shadow-[0_0_15px_rgba(192,132,252,0.2)]">
+                                                <CarFront className="w-6 h-6 text-purple-400" />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider bg-black/60 px-2 py-0.5 rounded-full backdrop-blur-sm shadow-sm border border-white/5">Cargador</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
-                            {/* COLUMNA DERECHA: ESPECIFICACIONES */}
+                            {/* COLUMNA DERECHA: ESPECIFICACIONES (Manteniendo estructura previa) */}
                             <div className="lg:w-1/2 bg-slate-50 rounded-2xl border border-slate-200 p-6 pt-4 flex flex-col overflow-y-auto">
                                 <div className="flex justify-between items-center mb-4">
                                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">TU CONFIGURACIÓN</h3>
@@ -268,16 +311,12 @@ const EcosystemWizard = () => {
 
                         </div>
 
-                        {/* ZONA INFERIOR: BARRA DE IMPACTO */}
+                        {/* ZONA INFERIOR: IMPACTO (Manteniendo estructura previa) */}
                         <div className="bg-slate-100 w-full rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-6 shadow-inner border border-slate-200">
-
-                            {/* DATO 1: AHORRO */}
                             <div className="text-center md:text-left">
                                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Ahorro Estimado</span>
                                 <div className="text-4xl font-black text-[#84cc16]">{savings}€<span className="text-lg text-slate-400 font-medium">/año</span></div>
                             </div>
-
-                            {/* DATO 2: ECOLOGÍA */}
                             <div className="flex gap-6">
                                 <div className="flex items-center gap-3">
                                     <div className="bg-white p-2 rounded-full shadow-sm"><Leaf className="w-5 h-5 text-[#84cc16]" /></div>
@@ -294,8 +333,6 @@ const EcosystemWizard = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* CTA */}
                             <button className="bg-[#84cc16] hover:bg-[#65a30d] text-[#0b1d16] font-bold text-sm px-8 py-4 rounded-xl shadow-lg shadow-lime-200 transition-all transform hover:scale-105 whitespace-nowrap">
                                 SOLICITAR PRESUPUESTO TÉCNICO
                             </button>
